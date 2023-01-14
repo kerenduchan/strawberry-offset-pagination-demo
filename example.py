@@ -62,7 +62,7 @@ class PaginationWindow(List[GenericType]):
     )
 
     total_items_count: int = strawberry.field(
-        description="Total items count in the dataset."
+        description="Total number of items in the filtered dataset."
     )
 
 
@@ -89,22 +89,22 @@ def get_pagination_window(
     """
     Get one pagination window on the given dataset for the given limit
     and offset, ordered by the given attribute and filtered using the
-    given filter
+    given filters
     """
 
-    # validate the limit
+    # Validate the limit
     if limit is not None and limit < 1:
         raise Exception(f'limit ({limit}) must be greater than 0')
 
-    # sort the dataset
+    # Sort the dataset
     dataset.sort(key=lambda x: x[order_by])
 
-    # filter the sorted dataset
+    # Filter the sorted dataset
     if filters:
         dataset = list(filter(lambda x: matches(x, filters), dataset))
 
-    # validate the offset
-    if not 0 <= offset < len(dataset):
+    # Validate the offset. Offset 0 is always valid, even for an empty dataset.
+    if offset != 0 and not 0 <= offset < len(dataset):
         raise Exception(f'offset ({offset}) is out of range '
                         f'(0-{len(dataset) - 1})')
 
