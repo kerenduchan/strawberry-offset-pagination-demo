@@ -6,6 +6,8 @@ Refer to the [strawberry documentation for offset-based pagination](https://stra
 # Install
 
 ```
+python -m venv virtualenv
+source virtualenv/bin/activate
 pip install 'strawberry-graphql[debug-server]'
 ```
 
@@ -65,7 +67,7 @@ The result contains:
 - `items` - A list of the users in this pagination window 
 - `totalItemsCount` - The total number of pages in the filtered dataset
 
-Get the next pagination window of users by running the same query, after incrementing `offset` by `limit`.
+Get the next page of users by running the same query, after incrementing `offset` by `limit`.
 
 Repeat until `offset` reaches `totalItemsCount`.
 
