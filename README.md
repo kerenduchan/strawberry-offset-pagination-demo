@@ -8,29 +8,6 @@ server with **offset** pagination.
 
 Refer to the [strawberry documentation for offset-based pagination](https://strawberry.rocks/docs/guides/pagination/offset-based) for more info.
 
-## Why Offset Pagination?
-
-Why **offset** pagination and not **cursor** pagination?
-
-**Offset** pagination is simpler and less bug-prone compared to **cursor** pagination.
-
-With **cursor** pagination, sort-by columns have to be unique (read 
-[here](https://medium.com/@keren.duchan/set-up-a-strawberry-graphql-server-with-pagination-python-711c2f4652b2) 
-for an explanation why). With **offset** pagination, they don't have to be.
-
-These are the advantages of using **offset** pagination instead of **cursor** pagination:
-
-- No risk of elusive bugs where entries are skipped because the column is not unique.
-- No need to create synthetic unique db columns per non-unique sort-by column.
-- The graphql interface is much cleaner and simpler.
-- Gives the client (UI) exactly what it needs: the items in a page number of a given size, 
-and how many pages there are in total.
-- Easy to implement in SQL databases using *limit* and *offset*.
-
-There is a performance hit, but IMO it is negligible in many use cases.
-For small datasets containing up to several thousands or maybe even up to a million items or more,
-and depending on other factors of your project, **offset** pagination may be the way to go.
-
 # Quickstart
 
 ## Install
