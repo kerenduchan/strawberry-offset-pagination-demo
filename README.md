@@ -1,24 +1,17 @@
 # strawberry-offset-pagination-demo
-A small demo project showing how to implement offset-based pagination using strawberry GraphQL
-
-# About
-
-This is a small demo python project, showing how to implement a Strawberry GraphQL 
-server with **offset** pagination.
+A small demo project showing how to implement **offset-based pagination** using [Strawberry](https://strawberry.rocks/) GraphQL.
 
 Refer to the [strawberry documentation for offset-based pagination](https://strawberry.rocks/docs/guides/pagination/offset-based) for more info.
 
-# Quickstart
-
-## Install
+# Install
 
 ```
-pip install -r requirements.txt
+pip install 'strawberry-graphql[debug-server]'
 ```
 
-## Run the Strawberry GraphQL server
+# Run the Strawberry GraphQL server
 ```
-strawberry server schema
+strawberry server example:schema
 ```
 You will get the following message:
 ```
@@ -27,50 +20,51 @@ Running strawberry on http://0.0.0.0:8000/graphql 🍓
 
 ## Query the server
 Go to [http://0.0.0.0:8000/graphql](http://0.0.0.0:8000/graphql) to open **GraphiQL**,
-and run the following query to get the first page of books, ordered by title,
-three books per page:
+and run the following query to get first two users:
 
 ```
 {
-  books(orderBy: "title", pageNumber: 1, pageSize: 3) {
-    pagesCount
+  users(
+    orderBy: "name",
+    offset: 0,
+    limit: 2
+  ) {
     items {
-      id
-      title
+      name
+      age
+      occupation
     }
+    totalItemsCount
   }
 }
-
 ```
 The result should look like this: 
 ```
 {
   "data": {
-    "books": {
-      "pagesCount": 4,
+    "users": {
       "items": [
         {
-          "id": "4",
-          "title": "1984"
+          "name": "Eddie Brock",
+          "age": 20,
+          "occupation": "Journalist, The Eddie Brock Report"
         },
         {
-          "id": "5",
-          "title": "Anne of Avonlea"
-        },
-        {
-          "id": "8",
-          "title": "Anne of Green Gables"
+          "name": "Harold Osborn",
+          "age": 19,
+          "occupation": "President, Oscorp Industries"
         }
-      ]
+      ],
+      "totalItemsCount": 4
     }
   }
 }
 ```
 
 The result contains:
-- `pagesCount` - The total number of pages
-- `items` - a list of the books in this page
+- `users` - A list of the users in this pagination window 
+- `totalItemsCount` - The total number of pages in the filtered dataset
 
-Get the next page of books by running the same query, after incrementing `pageNumber`.
+Get the next pagination window of users by running the same query, after incrementing `offset` by `limit`.
 
-Repeat until `pageNumber` is equal to `pagesCount`.
+Repeat until `offset` reaches `totalItemsCount`.
