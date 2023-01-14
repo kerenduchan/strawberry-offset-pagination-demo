@@ -1,7 +1,10 @@
 # strawberry-offset-pagination-demo
-A small demo project showing how to implement **offset-based pagination** using [Strawberry](https://strawberry.rocks/) GraphQL.
+A small demo project showing how to implement **offset-based pagination** 
+using [Strawberry](https://strawberry.rocks/) GraphQL.
 
-Refer to the [strawberry documentation for offset-based pagination](https://strawberry.rocks/docs/guides/pagination/offset-based) for more info.
+For more info , refer to the Strawberry 
+[documentation](https://strawberry.rocks/docs/guides/pagination/offset-based) 
+on offset-based pagination.
 
 # Install
 
@@ -21,8 +24,9 @@ Running strawberry on http://0.0.0.0:8000/graphql 🍓
 ```
 
 # Query the server
-Go to [http://0.0.0.0:8000/graphql](http://0.0.0.0:8000/graphql) to open **GraphiQL**,
-and run the following query to get first two users, ordered by name:
+Go to [http://0.0.0.0:8000/graphql](http://0.0.0.0:8000/graphql) to
+open **GraphiQL**, and run the following query to get first two users, 
+ordered by name:
 
 ```
 {
@@ -67,13 +71,15 @@ The result contains:
 - `items` - A list of the users in this pagination window 
 - `totalItemsCount` - The total number of pages in the filtered dataset
 
-Get the next page of users by running the same query, after incrementing `offset` by `limit`.
+Get the next page of users by running the same query, after incrementing 
+`offset` by `limit`.
 
 Repeat until `offset` reaches `totalItemsCount`.
 
-## Filtered Pagination
+## Filtering
 
-Run the following query to get the first two users whose occupation contains the substring "ie".
+Run the following query to get the first two users, ordered by name, whose 
+occupation contains the substring "ie".
 
 ```
 {
@@ -114,5 +120,6 @@ This is the result:
   }
 }
 ```
-Note that `totalItemsCount` is now 3 and not 4, because only 3 users in total match the filter.
+Note that `totalItemsCount` is now 3 and not 4, because only 3 users in total 
+match the filter.
 
