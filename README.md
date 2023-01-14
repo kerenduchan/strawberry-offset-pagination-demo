@@ -69,7 +69,7 @@ The result should look like this:
 
 The result contains:
 - `items` - A list of the users in this pagination window 
-- `totalItemsCount` - The total number of pages in the filtered dataset
+- `totalItemsCount` - The total number of items in the filtered dataset
 
 Get the next page of users by running the same query, after incrementing 
 `offset` by `limit`.
