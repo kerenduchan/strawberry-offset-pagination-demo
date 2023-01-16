@@ -1,34 +1,6 @@
 # example.py
-from typing import List, TypeVar, Optional, Dict, Any
+from typing import List, TypeVar, Dict, Any
 import strawberry
-
-# The dataset to be paginated
-user_data = [
-  {
-    "id": 1,
-    "name": "Norman Osborn",
-    "occupation": "Founder, Oscorp Industries",
-    "age": 42
-  },
-  {
-    "id": 2,
-    "name": "Peter Parker",
-    "occupation": "Freelance Photographer, The Daily Bugle",
-    "age": 20
-  },
-  {
-    "id": 3,
-    "name": "Harold Osborn",
-    "occupation": "President, Oscorp Industries",
-    "age": 19
-  },
-  {
-    "id": 4,
-    "name": "Eddie Brock",
-    "occupation": "Journalist, The Eddie Brock Report",
-    "age": 20
-  }
-]
 
 
 @strawberry.type
@@ -66,26 +38,71 @@ class PaginationWindow(List[GenericType]):
     )
 
 
-def matches(item, filters):
-    """
-    Test whether the item matches the given filters.
-    This demo only supports filtering by string fields.
-    """
+@strawberry.type
+class Query:
+    @strawberry.field(description="Get a list of users.")
+    def users(self,
+              order_by: str,
+              limit: int | None = None,
+              offset: int = 0,
+              name: str | None = None,
+              occupation: str | None = None
+              ) -> PaginationWindow[User]:
 
-    for attr_name, val in filters.items():
-        if val not in item[attr_name]:
-            return False
-    return True
+        filters = {}
 
+        if name:
+            filters['name'] = name
+
+        if occupation:
+            filters['occupation'] = occupation
+
+        return get_pagination_window(
+            dataset=user_data,
+            ItemType=User,
+            order_by=order_by,
+            limit=limit,
+            offset=offset,
+            filters=filters
+        )
+
+
+schema = strawberry.Schema(query=Query)
+
+user_data = [
+  {
+    "id": 1,
+    "name": "Norman Osborn",
+    "occupation": "Founder, Oscorp Industries",
+    "age": 42
+  },
+  {
+    "id": 2,
+    "name": "Peter Parker",
+    "occupation": "Freelance Photographer, The Daily Bugle",
+    "age": 20
+  },
+  {
+    "id": 3,
+    "name": "Harold Osborn",
+    "occupation": "President, Oscorp Industries",
+    "age": 19
+  },
+  {
+    "id": 4,
+    "name": "Eddie Brock",
+    "occupation": "Journalist, The Eddie Brock Report",
+    "age": 20
+  }
+]
 
 def get_pagination_window(
         dataset: List[GenericType],
         ItemType: type,
         order_by: str,
-        limit: Optional[int] = None,
+        limit: int | None = None,
         offset: int = 0,
-        filters: dict[str, str] = {}) \
-        -> PaginationWindow:
+        filters: dict[str, str] = {}) -> PaginationWindow:
     """
     Get one pagination window on the given dataset for the given limit
     and offset, ordered by the given attribute and filtered using the
@@ -124,33 +141,14 @@ def get_pagination_window(
     )
 
 
-@strawberry.type
-class Query:
-    @strawberry.field(description="Get a list of users.")
-    def users(self,
-              order_by: str,
-              limit: Optional[int] = None,
-              offset: int = 0,
-              name: Optional[str] = None,
-              occupation: Optional[str] = None
-              ) -> PaginationWindow[User]:
+def matches(item, filters):
+    """
+    Test whether the item matches the given filters.
+    This demo only supports filtering by string fields.
+    """
 
-        filters = {}
+    for attr_name, val in filters.items():
+        if val not in item[attr_name]:
+            return False
+    return True
 
-        if name:
-            filters['name'] = name
-
-        if occupation:
-            filters['occupation'] = occupation
-
-        return get_pagination_window(
-            dataset=user_data,
-            ItemType=User,
-            order_by=order_by,
-            limit=limit,
-            offset=offset,
-            filters=filters
-        )
-
-
-schema = strawberry.Schema(query=Query)
